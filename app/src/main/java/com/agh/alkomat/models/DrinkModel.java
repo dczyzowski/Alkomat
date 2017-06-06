@@ -99,8 +99,8 @@ public class DrinkModel {
         return mQuantity;
     }
 
-    public double getVolume() {
-        return mVolume;
+    public int getVolume() {
+        return (int) mVolume;
     }
 
     public double getActAlcInBody() {
