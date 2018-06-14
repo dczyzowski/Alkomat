@@ -17,68 +17,23 @@ public class DrinkModel {
     String mDrinkName;
 
     long timeToRest;
-    long startTime;
-    double mVolume;
-    double mQuantity;
-    double mWeight;
+    int mVolume;
+    int mQuantity;
     double actAlcInBody;
-    Calendar calendar;
 
-    public DrinkModel(String drinkName, double volume, double quantity, double weight){
+    public DrinkModel(String drinkName, int volume, int quantity){
         mDrinkName = drinkName;
         mVolume = volume;
         mQuantity = quantity;
-        mWeight = weight;
 
         // masa alkoholu = ilosc wypitego napoju w ml * zawartosc procentowa * 0.08 waga
-        double pureAlc = mQuantity*mVolume*0.01*0.8;
+        double pureAlc = mQuantity*mVolume*0.1*.8;
 
         // zawartosc alkoholu we krwi = ilosc spozytego alkoholu/ (wspolczynnik * waga osoby)
-        double alcInBody = pureAlc / (0.65*mWeight);
+        double alcInBody = pureAlc / (0.65*70);
+
         //1 promil to ok 7 h, pozostaly czas = 7h/promil * ilosc_promili;
-        double timeLeft =  25200 * alcInBody;
-        final long time = (long) timeLeft;
-        actAlcInBody = alcInBody;
-
-        new CountDownTimer(time * 1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                timeToRest = millisUntilFinished/1000 - 2;
-                actAlcInBody = (time-timeToRest)/(7*360);
-            }
-
-            public void onFinish() {
-            }
-        }.start();
-
-
-    }
-
-    public DrinkModel(String drinkName, double volume, double quantity, double weight, long addTime){
-        mDrinkName = drinkName;
-        mVolume = volume;
-        mQuantity = quantity;
-        mWeight = weight;
-
-        // masa alkoholu = ilosc wypitego napoju w ml * zawartosc procentowa * 0.08 waga
-        double pureAlc = mQuantity*mVolume*0.01*0.8;
-
-        // zawartosc alkoholu we krwi = ilosc spozytego alkoholu/ (wspolczynnik * waga osoby)
-        double alcInBody = pureAlc / (0.65*mWeight);
-        //1 promil to ok 7 h, pozostaly czas = 7h/promil * ilosc_promili;
-        double timeLeft =  25200 * alcInBody;
-        final long time = addTime + (long) timeLeft;
-
-        new CountDownTimer(time*1000, 1000) {
-
-            public void onTick(long millisUntilFinished) {
-                timeToRest = millisUntilFinished/1000;
-                actAlcInBody = (time-timeToRest)/(7*360);
-            }
-
-            public void onFinish() {
-            }
-        }.start();
+        timeToRest = (long) (1200 * alcInBody);
     }
 
     public String getDrinkName() {
@@ -86,16 +41,22 @@ public class DrinkModel {
     }
 
     public String getTimeLeft() {
+        long hours = timeToRest / 3600;
+        long minutes = (timeToRest % 3600) / 60;
+        long seconds = timeToRest % 60;
 
-        SimpleDateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-        return formatter.format(new Date(timeToRest*1000));
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds);
+    }
+
+    public void setTimeToRest(long newTime){
+        timeToRest = newTime;
     }
 
     public long getTimeToRest() {
         return timeToRest;
     }
 
-    public double getQuantity() {
+    public int getQuantity() {
         return mQuantity;
     }
 

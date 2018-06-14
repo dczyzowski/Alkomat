@@ -23,6 +23,7 @@ public class GridAdapter extends ArrayAdapter<DrinkModel> {
     LayoutInflater mInflater;
     ArrayList<DrinkModel> drinkModels;
 
+    //konstruktor klasy grid adapter
     public GridAdapter(@NonNull Context context, @LayoutRes int resource,
                        @NonNull ArrayList<DrinkModel> objects) {
         super(context, resource, objects);
@@ -31,12 +32,11 @@ public class GridAdapter extends ArrayAdapter<DrinkModel> {
         mInflater = LayoutInflater.from(context);
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView gridTitle;
         TextView gridVoltage;
         TextView gridQuantity;
         TextView timeLeft;
-        ImageView drinkImage;
 
         int position;
     }
@@ -49,6 +49,7 @@ public class GridAdapter extends ArrayAdapter<DrinkModel> {
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.grid_element, null);
 
+            //przypisuje obiektom id z layoutu
             holder = new ViewHolder();
             holder.gridTitle = (TextView) convertView.findViewById(R.id.drink_title);
             holder.gridQuantity = (TextView) convertView.findViewById(R.id.quantity);
@@ -61,22 +62,17 @@ public class GridAdapter extends ArrayAdapter<DrinkModel> {
         }
         holder.position = position;
 
-        try {
+        //ustawiam tekst na elementach layoutu
+        if(!drinkModels.isEmpty()) {
             holder.gridTitle.setText(drinkModels.get(position).getDrinkName());
             holder.gridVoltage.setText(drinkModels.get(position).getVolume() + "%");
             holder.gridQuantity.setText(drinkModels.get(position).getQuantity() + "ml");
-            if(drinkModels.get(position).getTimeToRest() > 0)
+            if (drinkModels.get(position).getTimeToRest() > 0)
                 holder.timeLeft.setText(drinkModels.get(position).getTimeLeft());
-            else{
+            else {
                 drinkModels.remove(position);
             }
         }
-        catch (IndexOutOfBoundsException excep){
-            Log.d("Index", excep.toString());
-        }
-
-
-
         return convertView;
     }
 }
